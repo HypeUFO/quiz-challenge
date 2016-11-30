@@ -47,23 +47,22 @@ var state = {
 // make sure an answer is chosen
 
 function validateRadio() {
+    $('.submit-button').on('click', validate);
+}
 
-    $('.submit-button').on('click', function() {
+function validate() {
         if ($('input[type=radio]:checked').length > 0 || state.currentQuestion == 0) {
             return true;
         } else {
             $('.error').show();
             return false;
         }
-    });
 }
-
-
 
 //is answer correct? if so, correctAnswers++
 
 function evaluateAnswer() {
-    $('.submit-button').on('click', function() {
+    $('.submit-button').on('click', function () {
         var a = document.getElementsByName('${state.questions.indexOf()}');
         for (i = 0; i < a.length; i++) {
             if (a[i].checked) {
@@ -81,7 +80,7 @@ function evaluateAnswer() {
 
 
 function evalProgress() {
-  console.log(state.currentQuestion);
+    console.log(state.currentQuestion);
     if (state.currentQuestion === 0) {
         state.progress = state.progressStates[0];
     } else if (state.currentQuestion > state.questions.length) {
@@ -100,12 +99,12 @@ function evalProgress() {
 function buttonToggle() {
 
 
-    $('.container').on('click', '.next-button', function() {
+    $('.container').on('click', '.next-button', function () {
         $(this).hide();
         $(this).siblings('.submit-button').show();
     });
 
-    $('.container').on('click', '.submit-button', function() {
+    $('.container').on('click', '.submit-button', function () {
         if (validateRadio() != false) {
             $(this).siblings('.next-button').show();
             $(this).hide();
@@ -115,52 +114,49 @@ function buttonToggle() {
 
 function renderProgress() {
     evalProgress();
-
-    function createProgressTemplate() {
-      var progress = state.progress;
-      var correctAnswers = state.correctAnswers;
-      var progressHtml = `<p>Progress: ${progress}
-    Score: ${correctAnswers}</p>`;
-
-      $('.progress').html(progressHtml);
-    }
     createProgressTemplate();
 
-    $('.next-button').on('click', function(event) {
-        evalProgress();
+    // $('.next-button').on('click', function (event) {
+    //     evalProgress();
+    //     createProgressTemplate();
+    // });
+}
 
+function createProgressTemplate() {
+    var progress = state.progress;
+    var correctAnswers = state.correctAnswers;
+    var progressHtml = `<p>Progress: ${progress}
+Score: ${correctAnswers}</p>`;
+
+    $('.progress').html(progressHtml);
+}
+
+function renderNextQuestion() {
+    $('.next-button').on('click', function (event) {
+        if (state.currentQuestion < state.questions.length) {
+            var question = state.questions[state.currentQuestion];
+            var questionHtml = `<p>${question.question}</p><form name="answerList">`;
+            var answers = question.choices.map(function (choice) {
+                return `<input type="radio" name="${state.questions.indexOf()}" id="${choice}.indexOf()" value="${choice}.indexOf()" required >
+            <label for="${choice}.indexOf()">${choice}</label><br>`;
+            }).join('');
+            questionHtml += answers;
+            questionHtml += `</form>`;
+            $('.questions').html(questionHtml);
+            $('.error').hide();
+        }
+        state.currentQuestion++;
+
+        evalProgress();
         createProgressTemplate();
     });
 }
 
 
 
-function renderNextQuestion() {
-
-    $('.next-button').on('click', function(event) {
-      if (state.currentQuestion === state.questions.length-1) {
-
-      }
-
-        var question = state.questions[state.currentQuestion++];
-        var questionHtml = `<p>${question.question}</p><form name="answerList">`;
-        var answers = question.choices.map(function(choice) {
-            return `<input type="radio" name="${state.questions.indexOf()}" id="${choice}.indexOf()" value="${choice}.indexOf()" required >
-        <label for="${choice}.indexOf()">${choice}</label><br>`;
-        }).join('');
-        questionHtml += answers;
-        questionHtml += `</form>`;
-        $('.questions').html(questionHtml);
-        $('.error').hide();
-    });
-    //renderProgress();
-}
-
-
-
 // Execute
 
-$('document').ready(function() {
+$('document').ready(function () {
 
     renderProgress();
     renderNextQuestion();

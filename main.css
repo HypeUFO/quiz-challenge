@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+button {
+  padding: 5px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.submit-button {
+  display: none;
+}
+
+.error {
+  display: none;
+  color: red;
+}
+

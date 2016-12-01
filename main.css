@@ -19,7 +19,7 @@ button:hover {
   cursor: pointer;
 }
 
-.submit-button {
+.submit-button, .restart-button {
   display: none;
 }
 

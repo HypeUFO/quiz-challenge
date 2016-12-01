@@ -46,42 +46,55 @@ var state = {
 
 // make sure an answer is chosen
 
-function validateRadio() {
+function validateRadioEvent() {
+    $('.submit-button').on('click', validateRadio);
+}
 
-    $('.submit-button').on('click', function() {
-        if ($('input[type=radio]:checked').length > 0 || state.currentQuestion == 0) {
-            return true;
-        } else {
-            $('.error').show();
-            return false;
-        }
-    });
+function validateRadio() {
+    if ($('input[type=radio]:checked').length > 0 || state.currentQuestion == 0) {
+        return true;
+    } else {
+        $('.error').show();
+        return false;
+    }
 }
 
 
+function evaluateAnswerEvent() {
+    $('.submit-button').on('click', checkAnswer);
+}
 
-//is answer correct? if so, correctAnswers++
+/*function checkAnswer() {
 
-function evaluateAnswer() {
-    $('.submit-button').on('click', function() {
-        var a = document.getElementsByName('${state.questions.indexOf()}');
-        for (i = 0; i < a.length; i++) {
-            if (a[i].checked) {
-                if (a[i].value == $(state.questions[currentQuestion - 1].answer)) {
-                    state.correctAnswers++;
-                    break;
-                }
+    var a = $('.questions').getElementsByName('${state.questions.indexOf()}');
+    for (i = 0; i < a.length; i++) {
+        if (a[i].checked) {
+            if (a[i].value === $(state.questions[currentQuestion - 1].answer)) {
+                state.correctAnswers++;
+                break;
             }
         }
-    });
+    }
+}*/
+
+function checkAnswer() {
+    console.log($(state.questions[2].answer));
+    if ($('input[type=radio]:checked').val() === $(state.questions[state.currentQuestion - 1].answer).value) {
+        state.correctAnswers++;
+    } else {
+        console.log("you got the wrong answer");
+    }
+
 }
+
+
 
 
 
 
 
 function evalProgress() {
-  console.log(state.currentQuestion);
+    console.log(state.currentQuestion);
     if (state.currentQuestion === 0) {
         state.progress = state.progressStates[0];
     } else if (state.currentQuestion > state.questions.length) {
@@ -101,61 +114,81 @@ function buttonToggle() {
 
 
     $('.container').on('click', '.next-button', function() {
-        $(this).hide();
-        $(this).siblings('.submit-button').show();
+        if (state.currentQuestion > state.questions.length) {
+            $(this).text("restart quiz");
+            $(this).siblings('.submit-button').hide();
+            state.currentQuestion = 0;
+        } else if (state.currentQuestion <= state.questions.length) {
+            $(this).hide();
+            $(this).siblings('.submit-button').show();
+        }
     });
 
     $('.container').on('click', '.submit-button', function() {
-        if (validateRadio() != false) {
-            $(this).siblings('.next-button').show();
+        if (validateRadio() != false && state.currentQuestion < state.questions.length) {
             $(this).hide();
-        }
+            $(this).siblings('.next-button').show().text("next");
+        } else if (validateRadio() != false && state.currentQuestion === state.questions.length) {
+            $(this).hide();
+            $(this).siblings('.next-button').show().text("show results");
+        } 
     });
 }
 
 function renderProgress() {
     evalProgress();
-
-    function createProgressTemplate() {
-      var progress = state.progress;
-      var correctAnswers = state.correctAnswers;
-      var progressHtml = `<p>Progress: ${progress}
-    Score: ${correctAnswers}</p>`;
-
-      $('.progress').html(progressHtml);
-    }
     createProgressTemplate();
+}
 
+function createProgressTemplate() {
+    var progress = state.progress;
+    var correctAnswers = state.correctAnswers;
+    var progressHtml = `<p>Progress: ${progress}
+Score: ${correctAnswers}/${state.questions.length}
+Question ${state.currentQuestion} of ${state.questions.length}</p>`;
+
+    $('.progress').html(progressHtml);
+}
+
+function renderNextQuestion() {
     $('.next-button').on('click', function(event) {
-        evalProgress();
+        if (state.currentQuestion < state.questions.length) {
+            var question = state.questions[state.currentQuestion];
+            var questionHtml = `<p>${question.question}</p><form name="answerList">`;
+            var answers = question.choices.map(function(choice) {
+                return `<input type="radio" name="${state.questions.indexOf()}" id="${choice}.indexOf()" value="${choice}" required >
+            <label for="${choice}.indexOf()">${choice}</label><br>`;
+            }).join('');
+            questionHtml += answers;
+            questionHtml += `</form>`;
+            $('.questions').html(questionHtml);
+            $('.error').hide();
+        }
 
+        state.currentQuestion++;
+
+        evalProgress();
         createProgressTemplate();
     });
 }
 
 
 
-function renderNextQuestion() {
+function renderResults() {
+    $('.next-button').on('click', function(event){
+    if (state.currentQuestion > state.questions.length) {
+        
 
-    $('.next-button').on('click', function(event) {
-      if (state.currentQuestion === state.questions.length-1) {
+            var resultsHtml = `<p>You answered ${state.correctAnswers} questions correctly out of ${state.questions.length} questions.</p>`;
+            
+            $('.questions').html(resultsHtml);
+            //state.currentQuestion = 0;
+        }
+        });
+    
 
-      }
 
-        var question = state.questions[state.currentQuestion++];
-        var questionHtml = `<p>${question.question}</p><form name="answerList">`;
-        var answers = question.choices.map(function(choice) {
-            return `<input type="radio" name="${state.questions.indexOf()}" id="${choice}.indexOf()" value="${choice}.indexOf()" required >
-        <label for="${choice}.indexOf()">${choice}</label><br>`;
-        }).join('');
-        questionHtml += answers;
-        questionHtml += `</form>`;
-        $('.questions').html(questionHtml);
-        $('.error').hide();
-    });
-    //renderProgress();
 }
-
 
 
 // Execute
@@ -164,16 +197,9 @@ $('document').ready(function() {
 
     renderProgress();
     renderNextQuestion();
-    validateRadio();
+    validateRadioEvent();
     buttonToggle();
-    evaluateAnswer();
-
-
-
-
-
-
-
-
+    //evaluateAnswerEvent();
+    renderResults();
 
 });

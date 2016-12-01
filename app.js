@@ -66,7 +66,7 @@ function evaluateAnswerEvent() {
 
 /*function checkAnswer() {
 
-    var a = $('.questions').getElementsByName('${state.questions.indexOf()}');
+    var a = document.getElementsByName("${state.questions.indexOf()}");
     for (i = 0; i < a.length; i++) {
         if (a[i].checked) {
             if (a[i].value === $(state.questions[currentQuestion - 1].answer)) {
@@ -78,11 +78,13 @@ function evaluateAnswerEvent() {
 }*/
 
 function checkAnswer() {
-    console.log($(state.questions[2].answer));
-    if ($('input[type=radio]:checked').val() === $(state.questions[state.currentQuestion - 1].answer).value) {
+    console.log($(state.questions[state.currentQuestion - 1].answer));
+    if ($('input[type=radio]:checked').val() === $(state.questions[state.currentQuestion - 1].answer)) {
         state.correctAnswers++;
-    } else {
-        console.log("you got the wrong answer");
+        $('.correct').show();
+    } else if (validateRadio() != false) {
+        console.log("you chose the wrong answer");
+        $('.incorrect').show();
     }
 
 }
@@ -131,7 +133,7 @@ function buttonToggle() {
         } else if (validateRadio() != false && state.currentQuestion === state.questions.length) {
             $(this).hide();
             $(this).siblings('.next-button').show().text("show results");
-        } 
+        }
     });
 }
 
@@ -143,15 +145,17 @@ function renderProgress() {
 function createProgressTemplate() {
     var progress = state.progress;
     var correctAnswers = state.correctAnswers;
-    var progressHtml = `<p>Progress: ${progress}
-Score: ${correctAnswers}/${state.questions.length}
-Question ${state.currentQuestion} of ${state.questions.length}</p>`;
+    var progressHtml = `<p>Progress: ${progress} |
+    Question ${state.currentQuestion} of ${state.questions.length} |
+    Score: ${correctAnswers}/${state.questions.length}</p>`;
 
     $('.progress').html(progressHtml);
 }
 
 function renderNextQuestion() {
     $('.next-button').on('click', function(event) {
+        $('.incorrect').hide();
+        $('.correct').hide();
         if (state.currentQuestion < state.questions.length) {
             var question = state.questions[state.currentQuestion];
             var questionHtml = `<p>${question.question}</p><form name="answerList">`;
@@ -175,31 +179,38 @@ function renderNextQuestion() {
 
 
 function renderResults() {
-    $('.next-button').on('click', function(event){
-    if (state.currentQuestion > state.questions.length) {
-        
+    $('.next-button').on('click', function(event) {
+        if (state.currentQuestion > state.questions.length) {
 
-            var resultsHtml = `<p>You answered ${state.correctAnswers} questions correctly out of ${state.questions.length} questions.</p>`;
-            
+            var resultsHtml = `<p>You answered ${state.correctAnswers} questions correctly out of ${state.questions.length} questions.
+            Your score is   ${state.correctAnswers / state.questions.length * 100}%</p>`;
+
             $('.questions').html(resultsHtml);
-            //state.currentQuestion = 0;
         }
-        });
-    
-
-
+    });
 }
 
+    function renderInit() {
+            if (state.currentQuestion === 0) {
 
-// Execute
+                var initHtml = `How well do you know rock history?
+                Let's find out!`;
 
-$('document').ready(function() {
+                $('.questions').html(initHtml);
+            }
 
-    renderProgress();
-    renderNextQuestion();
-    validateRadioEvent();
-    buttonToggle();
-    //evaluateAnswerEvent();
-    renderResults();
+    }
 
-});
+
+    // Execute
+
+    $('document').ready(function() {
+        renderInit();
+        renderProgress();
+        renderNextQuestion();
+        validateRadioEvent();
+        buttonToggle();
+        evaluateAnswerEvent();
+        renderResults();
+
+    });

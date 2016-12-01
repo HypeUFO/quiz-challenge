@@ -28,3 +28,14 @@ button:hover {
   color: red;
 }
 
+.correct, .incorrect {
+  display: none;
+}
+
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+}

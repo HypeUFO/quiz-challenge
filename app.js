@@ -46,6 +46,7 @@ var state = {
 
 // make sure an answer is chosen
 
+<<<<<<< HEAD
 function validateRadioEvent() {
     $('.submit-button').on('click', validateRadio);
 }
@@ -72,6 +73,32 @@ function evaluateAnswerEvent() {
             if (a[i].value === $(state.questions[currentQuestion - 1].answer)) {
                 state.correctAnswers++;
                 break;
+=======
+function validateRadio() {
+    $('.submit-button').on('click', validate);
+}
+
+function validate() {
+        if ($('input[type=radio]:checked').length > 0 || state.currentQuestion == 0) {
+            return true;
+        } else {
+            $('.error').show();
+            return false;
+        }
+}
+
+//is answer correct? if so, correctAnswers++
+
+function evaluateAnswer() {
+    $('.submit-button').on('click', function () {
+        var a = document.getElementsByName('${state.questions.indexOf()}');
+        for (i = 0; i < a.length; i++) {
+            if (a[i].checked) {
+                if (a[i].value == $(state.questions[currentQuestion - 1].answer)) {
+                    state.correctAnswers++;
+                    break;
+                }
+>>>>>>> 0e95b6a5289c647a5c5833e7ab12b1d3067dfc31
             }
         }
     }
@@ -113,6 +140,7 @@ function evalProgress() {
 function buttonToggle() {
 
 
+<<<<<<< HEAD
     $('.container').on('click', '.next-button', function() {
         if (state.currentQuestion > state.questions.length) {
             $(this).text("restart quiz");
@@ -126,6 +154,16 @@ function buttonToggle() {
 
     $('.container').on('click', '.submit-button', function() {
         if (validateRadio() != false && state.currentQuestion < state.questions.length) {
+=======
+    $('.container').on('click', '.next-button', function () {
+        $(this).hide();
+        $(this).siblings('.submit-button').show();
+    });
+
+    $('.container').on('click', '.submit-button', function () {
+        if (validateRadio() != false) {
+            $(this).siblings('.next-button').show();
+>>>>>>> 0e95b6a5289c647a5c5833e7ab12b1d3067dfc31
             $(this).hide();
             $(this).siblings('.next-button').show().text("next");
         } else if (validateRadio() != false && state.currentQuestion === state.questions.length) {
@@ -138,6 +176,7 @@ function buttonToggle() {
 function renderProgress() {
     evalProgress();
     createProgressTemplate();
+<<<<<<< HEAD
 }
 
 function createProgressTemplate() {
@@ -170,10 +209,25 @@ function renderNextQuestion() {
         evalProgress();
         createProgressTemplate();
     });
+=======
+
+    // $('.next-button').on('click', function (event) {
+    //     evalProgress();
+    //     createProgressTemplate();
+    // });
+>>>>>>> 0e95b6a5289c647a5c5833e7ab12b1d3067dfc31
 }
 
+function createProgressTemplate() {
+    var progress = state.progress;
+    var correctAnswers = state.correctAnswers;
+    var progressHtml = `<p>Progress: ${progress}
+Score: ${correctAnswers}</p>`;
 
+    $('.progress').html(progressHtml);
+}
 
+<<<<<<< HEAD
 function renderResults() {
     $('.next-button').on('click', function(event){
     if (state.currentQuestion > state.questions.length) {
@@ -187,13 +241,35 @@ function renderResults() {
         });
     
 
+=======
+function renderNextQuestion() {
+    $('.next-button').on('click', function (event) {
+        if (state.currentQuestion < state.questions.length) {
+            var question = state.questions[state.currentQuestion];
+            var questionHtml = `<p>${question.question}</p><form name="answerList">`;
+            var answers = question.choices.map(function (choice) {
+                return `<input type="radio" name="${state.questions.indexOf()}" id="${choice}.indexOf()" value="${choice}.indexOf()" required >
+            <label for="${choice}.indexOf()">${choice}</label><br>`;
+            }).join('');
+            questionHtml += answers;
+            questionHtml += `</form>`;
+            $('.questions').html(questionHtml);
+            $('.error').hide();
+        }
+        state.currentQuestion++;
+
+        evalProgress();
+        createProgressTemplate();
+    });
+}
+>>>>>>> 0e95b6a5289c647a5c5833e7ab12b1d3067dfc31
 
 }
 
 
 // Execute
 
-$('document').ready(function() {
+$('document').ready(function () {
 
     renderProgress();
     renderNextQuestion();

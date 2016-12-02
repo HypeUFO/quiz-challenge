@@ -30,21 +30,7 @@ var state = {
     }, ]
 };
 
-// Classes
-
-/*var Question = function() {
-  question: "",
-  choices: ['', '', '', ''],
-  answer: ''
-}
-*/
-
-
-
 // Validations
-
-
-// make sure an answer is chosen
 
 function validateRadioEvent() {
     $('.submit-button').on('click', validateRadio);
@@ -59,44 +45,19 @@ function validateRadio() {
     }
 }
 
-
-function evaluateAnswerEvent() {
-    $('.submit-button').on('click', checkAnswer);
-}
-
-/*function checkAnswer() {
-
-    var a = document.getElementsByName("${state.questions.indexOf()}");
-    for (i = 0; i < a.length; i++) {
-        if (a[i].checked) {
-            if (a[i].value === $(state.questions[currentQuestion - 1].answer)) {
-                state.correctAnswers++;
-                break;
-            }
-        }
-    }
-}*/
-
 function checkAnswer() {
-    console.log($(state.questions[state.currentQuestion - 1].answer));
-    if ($('input[type=radio]:checked').val() === $(state.questions[state.currentQuestion - 1].answer)) {
+    var choice = $(`input[name=${state.questions.indexOf()}]:checked`).val();
+    if (choice === state.questions[state.currentQuestion-1].answer) {
         state.correctAnswers++;
         $('.correct').show();
-    } else if (validateRadio() != false) {
-        console.log("you chose the wrong answer");
+    } else if (choice !== state.questions[state.currentQuestion-1].answer) {
         $('.incorrect').show();
+    } else {
+        $('.error').show();
     }
-
 }
 
-
-
-
-
-
-
 function evalProgress() {
-    console.log(state.currentQuestion);
     if (state.currentQuestion === 0) {
         state.progress = state.progressStates[0];
     } else if (state.currentQuestion > state.questions.length) {
@@ -107,10 +68,17 @@ function evalProgress() {
     return state.progress;
 }
 
+// Render Functions/Event Listeners
 
+function renderInit() {
+    if (state.currentQuestion === 0) {
 
+        var initHtml = `How well do you know rock history?
+                Let's find out!`;
 
-// Render Functions
+        $('.questions').html(initHtml);
+    }
+}
 
 function buttonToggle() {
 
@@ -145,11 +113,20 @@ function renderProgress() {
 function createProgressTemplate() {
     var progress = state.progress;
     var correctAnswers = state.correctAnswers;
-    var progressHtml = `<p>Progress: ${progress} |
+    if (state.currentQuestion > state.questions.length) {
+        var progressHtml = `<p>Progress: ${progress} |
+    Score: ${correctAnswers}/${state.questions.length}</p>`;
+    } else {
+        var progressHtml = `<p>Progress: ${progress} |
     Question ${state.currentQuestion} of ${state.questions.length} |
     Score: ${correctAnswers}/${state.questions.length}</p>`;
-
+    }
     $('.progress').html(progressHtml);
+}
+
+function evaluateAnswerEvent() {
+    $('.submit-button').on('click', checkAnswer);
+    
 }
 
 function renderNextQuestion() {
@@ -158,7 +135,7 @@ function renderNextQuestion() {
         $('.correct').hide();
         if (state.currentQuestion < state.questions.length) {
             var question = state.questions[state.currentQuestion];
-            var questionHtml = `<p>${question.question}</p><form name="answerList">`;
+            var questionHtml = `<p>${question.question}</p><form class="form-field" name="answerList">`;
             var answers = question.choices.map(function(choice) {
                 return `<input type="radio" name="${state.questions.indexOf()}" id="${choice}.indexOf()" value="${choice}" required >
             <label for="${choice}.indexOf()">${choice}</label><br>`;
@@ -190,27 +167,17 @@ function renderResults() {
     });
 }
 
-    function renderInit() {
-            if (state.currentQuestion === 0) {
+// Execute
 
-                var initHtml = `How well do you know rock history?
-                Let's find out!`;
+$('document').ready(function() {
+    renderInit();
+    renderProgress();
+    renderNextQuestion();
+    validateRadioEvent();
+    buttonToggle();
+    evaluateAnswerEvent();
+    renderResults();
 
-                $('.questions').html(initHtml);
-            }
-
-    }
 
 
-    // Execute
-
-    $('document').ready(function() {
-        renderInit();
-        renderProgress();
-        renderNextQuestion();
-        validateRadioEvent();
-        buttonToggle();
-        evaluateAnswerEvent();
-        renderResults();
-
-    });
+});

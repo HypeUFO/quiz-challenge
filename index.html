@@ -5,22 +5,34 @@
     <title>Quiz Challenge</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+    <link rel="stylesheet" type="text/css" href="float-grid.css">
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link href="https://fonts.googleapis.com/css?family=Almendra+SC" rel="stylesheet">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+    <!--<link rel="stylesheet" type="text/css" href="bootstrap.min.css">-->
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <h1>Rock 'N Roll History Quiz</h1>
-        </header>
-        <div class="progress"></div>
-        <p class="error">Please choose an answer</p>
-        <div class="questions"></div>
-        <button class="next-button">start quiz</button>
-        <button class="submit-button">submit</button>
-        <p class="correct">correct!</p>
-        <p class="incorrect">incorrect</p>
-    </div>
+    <header>
+        <div class="row">
+            <div class="col-12">
+                <h1>Rock 'N Roll History Quiz</h1>
+            </div>
+        </div>
+    </header>
+    <section class="container row">
+        <div class="quiz">
+            <div class="progress"></div>
+            <div class="questions"></div>
+            <button class="next-button">start quiz</button>
+            <button class="submit-button">submit</button>
+            <p class="correct">correct!</p>
+            <p class="incorrect">incorrect</p>
+            <p class="error">Please choose an answer</p>
+        </div>
+    </section>
+    <footer class="col-12">
+    </footer>
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
 </body>

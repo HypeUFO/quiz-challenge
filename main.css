@@ -1,0 +1,92 @@
+* {
+    box-sizing: border-box;
+    /*border: 3px solid black;*/
+}
+
+body {
+    font-family: sans-serif;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("images/brown-strat.jpg");
+    background-repeat: repeat-y;
+    background-size: 100%;
+}
+
+header {
+    text-align: center;
+    font-family: 'Almendra SC', serif;
+    font-size: 1.25em;
+    background-image: url("images/pick-guard.jpg");
+
+    color: #492e1c;
+    /*margin-bottom: 18px;*/
+}
+
+.container {
+    font-size: 18px;
+    padding: 12px;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("images/close-up.png");
+    background-size: 10%;
+    color: #492e1c;
+    height: 350px;
+    max-width: 450px;
+    margin: 100px auto;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.quiz {
+    position: relative;
+    width: 100%
+}
+
+.progress {
+    margin-bottom: 40px;
+}
+
+.questions {
+    margin-bottom: 12px;
+}
+
+button {
+    padding: 5px;
+}
+
+button:hover {
+    cursor: pointer;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.submit-button,
+.restart-button {
+    display: none;
+}
+
+.error {
+    display: none;
+    color: red;
+}
+
+.correct,
+.incorrect {
+    display: none;
+}
+
+.correct {
+    color: green;
+}
+
+.incorrect {
+    color: red;
+}
+
+
+/*
+footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 5px;
+  background-image: url("images/pick-guard.jpg");
+  text-align: center;
+
+}*/

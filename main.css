@@ -15,7 +15,6 @@ header {
     font-family: 'Almendra SC', serif;
     font-size: 1.25em;
     background-image: url("images/pick-guard.jpg");
-
     color: #492e1c;
     /*margin-bottom: 18px;*/
 }
@@ -52,7 +51,7 @@ button {
 
 button:hover {
     cursor: pointer;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 .submit-button,

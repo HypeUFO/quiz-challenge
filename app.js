@@ -47,10 +47,10 @@ function validateRadio() {
 
 function checkAnswer() {
     var choice = $(`input[name=${state.questions.indexOf()}]:checked`).val();
-    if (choice === state.questions[state.currentQuestion-1].answer) {
+    if (choice === state.questions[state.currentQuestion - 1].answer) {
         state.correctAnswers++;
         $('.correct').show();
-    } else if (choice !== state.questions[state.currentQuestion-1].answer) {
+    } else if (choice !== state.questions[state.currentQuestion - 1].answer && $('input[type=radio]:checked').length > 0) {
         $('.incorrect').show();
     } else {
         $('.error').show();
@@ -126,7 +126,7 @@ function createProgressTemplate() {
 
 function evaluateAnswerEvent() {
     $('.submit-button').on('click', checkAnswer);
-    
+
 }
 
 function renderNextQuestion() {

@@ -72,7 +72,6 @@ function evalProgress() {
 
 function renderInit() {
     if (state.currentQuestion === 0) {
-
         var initHtml = `How well do you know rock history?
                 Let's find out!`;
 
@@ -88,6 +87,7 @@ function buttonToggle() {
             $(this).text("restart quiz");
             $(this).siblings('.submit-button').hide();
             state.currentQuestion = 0;
+            state.correctAnswers = 0;
         } else if (state.currentQuestion <= state.questions.length) {
             $(this).hide();
             $(this).siblings('.submit-button').show();
